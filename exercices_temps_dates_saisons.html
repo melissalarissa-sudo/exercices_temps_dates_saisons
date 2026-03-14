@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exercices — Le Temps, les Dates, les Saisons</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0F1923; --surf:#1A2635; --surf2:#223045; --bord:#2E4060;
+  --blue:#3B82F6; --blue-lt:#60A5FA; --blue-glow:rgba(59,130,246,.25);
+  --green:#10B981; --green-lt:#34D399; --green-glow:rgba(16,185,129,.2);
+  --orange:#F59E0B; --orange-lt:#FCD34D;
+  --red:#EF4444; --red-lt:#FCA5A5;
+  --purple:#8B5CF6; --purple-lt:#C4B5FD;
+  --yellow:#EAB308; --yellow-lt:#FEF08A;
+  --text:#E2EBF5; --muted:#7A93B0;
+  --r:14px; --rs:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 40% at 10% 15%,rgba(59,130,246,.09) 0%,transparent 60%),
+             radial-gradient(ellipse 50% 35% at 90% 80%,rgba(139,92,246,.07) 0%,transparent 60%)}
+header{position:relative;z-index:1;padding:1.8rem 2rem 1rem;text-align:center;
+  border-bottom:1px solid var(--bord);background:linear-gradient(180deg,rgba(59,130,246,.07) 0%,transparent 100%)}
+header h1{font-family:'Lora',serif;font-size:clamp(1.3rem,4vw,2rem);
+  background:linear-gradient(135deg,#60A5FA,#FCD34D);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+header p{color:var(--muted);margin-top:.3rem;font-size:.85rem}
+.tabs{display:flex;gap:.35rem;justify-content:center;flex-wrap:wrap;
+  padding:.8rem 1rem;border-bottom:1px solid var(--bord);position:relative;z-index:1}
+.tab-btn{background:var(--surf);border:1.5px solid var(--bord);color:var(--muted);
+  border-radius:99px;padding:.4rem .9rem;font-size:.78rem;
+  font-family:'Sora',sans-serif;font-weight:600;cursor:pointer;transition:all .2s}
+.tab-btn:hover{border-color:var(--blue);color:var(--blue-lt)}
+.tab-btn.active{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 0 14px var(--blue-glow)}
+main{max-width:820px;margin:0 auto;padding:1.2rem 1rem 4rem;position:relative;z-index:1}
+.section{display:none}.section.active{display:block}
+.sec-title{font-family:'Lora',serif;font-size:1.15rem;font-weight:600;margin-bottom:.3rem}
+.sec-desc{color:var(--muted);font-size:.86rem;font-weight:300;margin-bottom:1rem;line-height:1.6}
+.rule-card{background:var(--surf);border:1px solid var(--bord);border-left:4px solid var(--blue);
+  border-radius:var(--r);padding:.85rem 1rem;margin-bottom:.9rem;font-size:.87rem;line-height:1.7}
+.rule-card.orange{border-left-color:var(--orange)}
+.rule-card.green{border-left-color:var(--green)}
+.rule-card.yellow{border-left-color:var(--yellow)}
+.rule-card.purple{border-left-color:var(--purple)}
+.rule-card b{color:var(--blue-lt)}
+.rule-card.orange b{color:var(--orange-lt)}
+.rule-card.green b{color:var(--green-lt)}
+.rule-card.yellow b{color:var(--yellow-lt)}
+.rule-card.purple b{color:var(--purple-lt)}
+hr.div{border:none;border-top:1px solid var(--bord);margin:1.2rem 0}
+/* LISTEN ITEMS */
+.listen-item{background:var(--surf);border:1px solid var(--bord);border-radius:var(--r);
+  padding:.75rem .9rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;transition:border-color .2s}
+.listen-item:hover{border-color:var(--blue)}
+.lw{font-family:'Lora',serif;font-size:1rem;font-weight:600;flex:1;min-width:90px}
+.lw span{color:var(--orange-lt)}
+.lw em{color:var(--muted);font-size:.82rem;font-style:italic}
+.lphon{font-size:.75rem;color:var(--muted);font-style:italic;min-width:60px}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:.3rem;border-radius:99px;
+  padding:.35rem .8rem;font-size:.76rem;font-family:'Sora',sans-serif;font-weight:600;
+  cursor:pointer;transition:all .15s;border:none;white-space:nowrap}
+.btn-blue{background:var(--surf2);border:1.5px solid var(--blue);color:var(--blue-lt)}
+.btn-blue:hover{background:var(--blue);color:#fff}
+.btn-slow{background:var(--surf2);border:1.5px solid var(--orange);color:var(--orange-lt)}
+.btn-slow:hover{background:var(--orange);color:#fff}
+.btn-check{background:var(--blue);border:none;color:#fff;padding:.45rem 1.1rem;font-size:.83rem}
+.btn-check:hover{background:#2563EB;box-shadow:0 0 12px var(--blue-glow)}
+.btn-reset{background:transparent;border:1px solid var(--bord);color:var(--muted);padding:.45rem .9rem;font-size:.8rem}
+.btn-reset:hover{border-color:var(--muted);color:var(--text)}
+/* REC */
+.btn-rec{display:inline-flex;align-items:center;gap:.35rem;background:var(--surf2);
+  border:2px solid var(--red);color:var(--red-lt);border-radius:99px;padding:.38rem .85rem;
+  font-size:.76rem;font-family:'Sora',sans-serif;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-rec:hover{background:rgba(239,68,68,.15)}
+.btn-rec.recording{background:var(--red);color:#fff;animation:prec 1s infinite}
+@keyframes prec{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.4)}50%{box-shadow:0 0 0 7px rgba(239,68,68,0)}}
+.rdot{width:8px;height:8px;background:currentColor;border-radius:50%;flex-shrink:0}
+.btn-rec.recording .rdot{animation:blink .6s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.rec-zone{background:var(--surf);border:1.5px dashed var(--bord);border-radius:var(--r);
+  padding:.9rem;margin-top:.4rem;text-align:center}
+.rec-status{font-size:.75rem;color:var(--muted);margin-top:.35rem;min-height:.9rem}
+.audio-pb{margin-top:.5rem;display:none}
+.audio-pb audio{width:100%;height:32px;border-radius:6px}
+/* EXERCISE CARD */
+.ex-card{background:var(--surf);border:1px solid var(--bord);border-radius:var(--r);padding:1.1rem;margin-bottom:.8rem}
+.ex-card h3{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:.6rem}
+.ex-card h3 span{color:var(--blue-lt);text-transform:none}
+.mcq-q{font-family:'Lora',serif;font-size:.97rem;margin-bottom:.6rem;line-height:1.5}
+.mcq-opts{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.4rem}
+.mcq-opt{background:var(--surf2);border:1.5px solid var(--bord);color:var(--text);
+  border-radius:var(--rs);padding:.38rem .85rem;font-size:.86rem;
+  font-family:'Sora',sans-serif;cursor:pointer;transition:all .15s}
+.mcq-opt:hover:not(:disabled){border-color:var(--blue);color:var(--blue-lt)}
+.mcq-opt.correct{background:rgba(16,185,129,.15);border-color:var(--green);color:var(--green-lt)}
+.mcq-opt.wrong{background:rgba(239,68,68,.12);border-color:var(--red);color:var(--red-lt)}
+.mcq-opt:disabled{opacity:.75;cursor:default}
+.fill-in{background:var(--surf2);border:1.5px solid var(--bord);color:var(--text);
+  border-radius:var(--rs);padding:.32rem .55rem;font-size:.92rem;font-family:'Lora',serif;
+  width:100px;text-align:center;outline:none;transition:border-color .2s;vertical-align:middle}
+.fill-in:focus{border-color:var(--blue)}
+.fill-in.correct{border-color:var(--green);background:rgba(16,185,129,.1);color:var(--green-lt)}
+.fill-in.wrong{border-color:var(--red);background:rgba(239,68,68,.08);color:var(--red-lt)}
+.feedback{font-size:.81rem;padding:.42rem .75rem;border-radius:var(--rs);margin-top:.5rem;display:none;font-weight:500;line-height:1.5}
+.feedback.ok{background:var(--green-glow);color:var(--green-lt);border:1px solid var(--green)}
+.feedback.ko{background:rgba(239,68,68,.1);color:var(--red-lt);border:1px solid var(--red)}
+/* SCORE */
+.score-bar{background:var(--surf);border:1px solid var(--bord);border-radius:var(--r);
+  padding:.6rem 1rem;display:flex;align-items:center;gap:.8rem;margin-bottom:1rem}
+.slabel{font-size:.8rem;color:var(--muted);font-weight:600}
+.sval{font-size:1.1rem;font-weight:800;color:var(--blue-lt)}
+.sprg{flex:1;height:6px;background:var(--surf2);border-radius:99px;overflow:hidden}
+.sfill{height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:99px;transition:width .4s ease}
+/* CLOCK GRID */
+.clock-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.6rem;margin-bottom:1rem}
+.clock-card{background:var(--surf);border:1.5px solid var(--bord);border-radius:var(--r);
+  padding:.85rem;text-align:center;cursor:pointer;transition:all .2s}
+.clock-card:hover{border-color:var(--blue);transform:translateY(-2px);background:var(--surf2)}
+.clock-card .time{font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:800;color:var(--blue-lt);display:block;margin-bottom:.2rem}
+.clock-card .text{font-family:'Lora',serif;font-size:.82rem;color:var(--text);line-height:1.4}
+.clock-card .pt{font-size:.72rem;color:var(--muted);font-style:italic;margin-top:.15rem}
+.clock-card .pico{display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;background:var(--blue);border-radius:50%;margin-top:.4rem;font-size:.62rem;color:#fff}
+/* CALENDAR GRID */
+.cal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:1rem}
+.cal-card{background:var(--surf);border:1.5px solid var(--bord);border-radius:var(--rs);
+  padding:.65rem;text-align:center;cursor:pointer;transition:all .2s}
+.cal-card:hover{border-color:var(--orange);transform:translateY(-1px)}
+.cal-card .fr{font-family:'Lora',serif;font-size:.95rem;font-weight:600;color:var(--orange-lt)}
+.cal-card .pt{font-size:.75rem;color:var(--muted);font-style:italic;margin-top:.1rem}
+/* SEASON CARDS */
+.season-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem;margin-bottom:1rem}
+.season-card{border-radius:var(--r);padding:1rem;text-align:center;cursor:pointer;transition:all .2s;border:2px solid transparent}
+.season-card:hover{transform:translateY(-2px)}
+.season-card.printemps{background:rgba(16,185,129,.12);border-color:var(--green)}
+.season-card.ete{background:rgba(234,179,8,.1);border-color:var(--yellow)}
+.season-card.automne{background:rgba(245,158,11,.12);border-color:var(--orange)}
+.season-card.hiver{background:rgba(59,130,246,.1);border-color:var(--blue)}
+.season-card .name{font-family:'Lora',serif;font-size:1.2rem;font-weight:600;margin-bottom:.2rem}
+.season-card.printemps .name{color:var(--green-lt)}
+.season-card.ete .name{color:var(--yellow-lt)}
+.season-card.automne .name{color:var(--orange-lt)}
+.season-card.hiver .name{color:var(--blue-lt)}
+.season-card .months{font-size:.78rem;color:var(--muted);margin-bottom:.3rem}
+.season-card .phrase{font-size:.82rem;color:var(--text);font-style:italic}
+/* badge */
+.badge{display:inline-block;background:var(--surf2);border:1px solid var(--bord);
+  color:var(--muted);border-radius:99px;padding:.12rem .55rem;font-size:.7rem;font-weight:600;margin-left:.4rem;vertical-align:middle}
+/* dl btn */
+.btn-dl{display:inline-flex;align-items:center;gap:.3rem;background:var(--green);color:#fff;
+  border:none;border-radius:99px;padding:.35rem .85rem;font-size:.75rem;
+  font-family:'Sora',sans-serif;font-weight:600;cursor:pointer;text-decoration:none;margin-top:.3rem}
+.btn-dl:hover{background:#059669}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bord);border-radius:99px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Le Temps, les Dates &amp; les Saisons</h1>
+  <p>Fran&ccedil;ais A1 &bull; &Eacute;coute &bull; Prononciation &bull; Exercices interactifs &bull; Enregistrement</p>
+</header>
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="heures">Les heures</button>
+  <button class="tab-btn" data-tab="jours">Les jours</button>
+  <button class="tab-btn" data-tab="mois">Les mois</button>
+  <button class="tab-btn" data-tab="saisons">Les saisons</button>
+  <button class="tab-btn" data-tab="dates">Les dates</button>
+  <button class="tab-btn" data-tab="quiz">Quiz</button>
+  <button class="tab-btn" data-tab="oral">Oral</button>
+</nav>
+<main>
+
+<!-- ══ HEURES ══ -->
+<div id="tab-heures" class="section active">
+  <div class="sec-title">Les heures</div>
+  <div class="sec-desc">Clique sur une heure pour l'entendre. &Eacute;coute et r&eacute;p&egrave;te !</div>
+  <div class="rule-card orange">
+    <b>Rappel :</b> Il est + heure + heure(s). &nbsp;|&nbsp;
+    <b>et quart</b> = +15min &nbsp;|&nbsp; <b>et demie</b> = +30min &nbsp;|&nbsp; <b>moins le quart</b> = -15min
+  </div>
+  <div class="clock-grid" id="clock-grid"></div>
+  <hr class="div">
+  <div class="sec-title" style="font-size:.95rem;margin-bottom:.5rem">&Eacute;couter et r&eacute;p&eacute;ter — heures courantes</div>
+  <div id="heures-list"></div>
+  <hr class="div">
+  <div class="sec-title" style="font-size:.95rem;margin-bottom:.3rem">
+    Quiz — Quelle heure est-il ?<span class="badge" id="hq-badge">0 / 0</span>
+  </div>
+  <div class="sec-desc">Lis l'heure sur l'horloge, choisis la bonne r&eacute;ponse.</div>
+  <div id="heure-quiz"></div>
+</div>
+
+<!-- ══ JOURS ══ -->
+<div id="tab-jours" class="section">
+  <div class="sec-title">Les jours de la semaine</div>
+  <div class="sec-desc">Clique sur chaque jour pour l'entendre. La semaine fran&ccedil;aise commence le <b style="color:var(--blue-lt)">lundi</b> !</div>
+  <div class="rule-card">
+    <b>R&egrave;gle :</b> Les jours s'&eacute;crivent en <b>minuscule</b>. &nbsp;|&nbsp;
+    "Je travaille <b>lundi</b>" = ce lundi seulement. &nbsp;|&nbsp;
+    "Je travaille <b>le lundi</b>" = tous les lundis.
+  </div>
+  <div id="jours-grid"></div>
+  <hr class="div">
+  <div class="sec-title" style="font-size:.95rem;margin-bottom:.5rem">Expressions avec les jours</div>
+  <div id="jours-expr"></div>
+  <hr class="div">
+  <div class="sec-title" style="font-size:.95rem;margin-bottom:.3rem">
+    Quiz — Quel jour ?<span class="badge" id="jq-badge">0 / 0</span>
+  </div>
+  <div id="jours-quiz"></div>
+</div>
+
+<!-- ══ MOIS ══ -->
+<div id="tab-mois" class="section">
+  <div class="sec-title">Les mois de l'ann&eacute;e</div>
+  <div class="sec-desc">Clique sur un mois pour l'entendre. Rappel : les mois s'&eacute;crivent en <b style="color:var(--blue-lt)">minuscule</b> et on dit <b style="color:var(--orange-lt)">en</b> + mois.</div>
+  <div class="cal-grid" id="mois-grid"></div>
+  <hr class="div">
+  <div class="sec-title" style="font-size:.95rem;margin-bottom:.5rem">&Eacute;couter et r&eacute;p&eacute;ter — phrases avec les mois</div>
+  <div id="mois-list"></div>
+  <hr class="div">
+  <div class="sec-title" style="font-size:.95rem;margin-bottom:.3rem">
+    Quiz — Quel mois ?<span class="badge" id="mq-badge">0 / 0</span>
+  </div>
+  <div id="mois-quiz"></div>
+</div>
+
+<!-- ══ SAISONS ══ -->
+<div id="tab-saisons" class="section">
+  <div class="sec-title">Les saisons</div>
+  <div class="sec-desc">Clique sur une saison pour entendre la phrase. Attention aux pr&eacute;positions : <b style="color:var(--green-lt)">au</b> printemps, <b style="color:var(--orange-lt)">en</b> &eacute;t&eacute; / automne / hiver.</div>
+  <div class="rule-card yellow">
+    <b>France vs Br&eacute;sil :</b> Les saisons sont invers&eacute;es ! L'&eacute;t&eacute; en France (juin-ao&ucirc;t) = l'hiver au Br&eacute;sil. Les temp&eacute;ratures en France sont beaucoup plus basses qu'au Br&eacute;sil.
+  </div>
+  <div class="season-grid" id="saisons-grid"></div>
+  <hr class="div">
+  <div class="sec-title" style="font-size:.95rem;margin-bottom:.5rem">M&eacute;t&eacute;o — &eacute;couter et r&eacute;p&eacute;ter</div>
+  <div id="meteo-list"></div>
+  <hr class="div">
+  <div class="sec-title" style="font-size:.95rem;margin-bottom:.3rem">
+    Quiz — Quelle saison ?<span class="badge" id="sq-badge">0 / 0</span>
+  </div>
+  <div id="saisons-quiz"></div>
+</div>
+
+<!-- ══ DATES ══ -->
+<div id="tab-dates" class="section">
+  <div class="sec-title">Les dates compl&egrave;tes</div>
+  <div class="sec-desc">Structure : <b style="color:var(--blue-lt)">Le + jour (chiffre) + mois + ann&eacute;e</b>. &Eacute;coute et r&eacute;p&egrave;te !</div>
+  <div class="rule-card">
+    <b>1<sup>er</sup> du mois :</b> On dit "le <b>premier</b>" (pas "le un"). &nbsp;|&nbsp;
+    Pour les autres : "le deux, le trois..." &nbsp;|&nbsp;
+    Les ann&eacute;es : toujours le nombre complet ("deux mille vingt-quatre", jamais "vingt vingt-quatre").
+  </div>
+  <div id="dates-list"></div>
+  <hr class="div">
+  <div class="sec-title" style="font-size:.95rem;margin-bottom:.3rem">
+    Quiz — Construis la date<span class="badge" id="dq-badge">0 / 0</span>
+  </div>
+  <div id="dates-quiz"></div>
+</div>
+
+<!-- ══ QUIZ GENERAL ══ -->
+<div id="tab-quiz" class="section">
+  <div class="sec-title">Quiz g&eacute;n&eacute;ral</div>
+  <div class="sec-desc">Teste toutes tes connaissances ! Heures, jours, mois, saisons et dates m&eacute;lang&eacute;s.</div>
+  <div class="score-bar">
+    <span class="slabel">Score</span>
+    <span class="sval" id="gq-score">0 / 0</span>
+    <div class="sprg"><div class="sfill" id="gq-fill" style="width:0%"></div></div>
+  </div>
+  <div id="general-quiz"></div>
+</div>
+
+<!-- ══ ORAL ══ -->
+<div id="tab-oral" class="section">
+  <div class="sec-title">Production orale</div>
+  <div class="sec-desc">&Eacute;coute le mod&egrave;le, puis enregistre ta r&eacute;ponse. T&eacute;l&eacute;charge pour l'envoyer &agrave; ton professeur !</div>
+  <div class="rule-card green">
+    <b>Comment faire :</b> 1. &Eacute;coute le mod&egrave;le lentement. 2. Enregistre ta voix. 3. Compare et t&eacute;l&eacute;charge !
+  </div>
+  <div id="oral-list"></div>
+</div>
+
+</main>
+<script>
+(function(){
+
+// ── SPEECH ──────────────────────────────────────────────
+function getFrVoice(){
+  var vv=window.speechSynthesis.getVoices();
+  for(var i=0;i<vv.length;i++) if(vv[i].lang&&vv[i].lang.indexOf('fr')===0) return vv[i];
+  return null;
+}
+function makeUtt(text,slow){
+  var u=new SpeechSynthesisUtterance(text);
+  u.lang='fr-FR'; u.rate=slow?0.25:0.88; u.pitch=1.05;
+  var fr=getFrVoice(); if(fr) u.voice=fr; return u;
+}
+function speak(text,slow){ window.speechSynthesis.cancel(); window.speechSynthesis.speak(makeUtt(text,slow)); }
+function speakSequence(segs){
+  window.speechSynthesis.cancel();
+  function next(i){
+    if(i>=segs.length) return;
+    var s=segs[i];
+    var u=new SpeechSynthesisUtterance(s.text);
+    u.lang='fr-FR';
+    u.rate=s.rate==='slow'?0.25:s.rate==='ann'?0.82:0.88;
+    u.pitch=s.rate==='ann'?1.1:1.05;
+    var fr=getFrVoice(); if(fr) u.voice=fr;
+    u.onend=function(){ setTimeout(function(){ next(i+1); },s.pause||500); };
+    window.speechSynthesis.speak(u);
+  }
+  next(0);
+}
+if(window.speechSynthesis.onvoiceschanged!==undefined)
+  window.speechSynthesis.onvoiceschanged=function(){ window.speechSynthesis.getVoices(); };
+
+// ── RECORDING ───────────────────────────────────────────
+var activeRec=null, activeChunks=[];
+function toggleRecord(btn,pbId){
+  if(btn.classList.contains('recording')){
+    if(activeRec&&activeRec.state==='recording') activeRec.stop();
+    return;
+  }
+  if(activeRec&&activeRec.state==='recording') activeRec.stop();
+  var statusEl=null, node=btn;
+  for(var up=0;up<5;up++){ node=node.parentNode; if(!node) break; statusEl=node.querySelector('.rec-status'); if(statusEl) break; }
+  function setStatus(m){ if(statusEl) statusEl.textContent=m; }
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){ setStatus('Micro non supporté.'); return; }
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    var cands=['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/ogg','audio/mp4',''];
+    var mime='';
+    for(var c=0;c<cands.length;c++) if(!cands[c]||(window.MediaRecorder&&MediaRecorder.isTypeSupported(cands[c]))){ mime=cands[c]; break; }
+    try{ activeRec=new MediaRecorder(stream,mime?{mimeType:mime}:{}); }
+    catch(e){ activeRec=new MediaRecorder(stream); }
+    activeChunks=[];
+    activeRec.ondataavailable=function(e){ if(e.data&&e.data.size>0) activeChunks.push(e.data); };
+    activeRec.onstop=function(){
+      stream.getTracks().forEach(function(t){ t.stop(); });
+      var type=mime||'audio/webm';
+      var blob=new Blob(activeChunks,{type:type});
+      var url=URL.createObjectURL(blob);
+      var pb=document.getElementById(pbId);
+      if(pb){
+        pb.querySelector('audio').src=url; pb.style.display='block';
+        var ext=type.indexOf('ogg')!==-1?'ogg':type.indexOf('mp4')!==-1?'mp4':'webm';
+        var now=new Date();
+        var stamp=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0')+'_'+String(now.getHours()).padStart(2,'0')+'h'+String(now.getMinutes()).padStart(2,'0');
+        var fname='enregistrement_'+pbId+'_'+stamp+'.'+ext;
+        var ex=pb.querySelector('.btn-dl'); if(ex) ex.remove();
+        var dl=document.createElement('a'); dl.className='btn-dl'; dl.href=url; dl.download=fname;
+        dl.innerHTML='&#8681; Télécharger'; pb.appendChild(dl);
+      }
+      btn.classList.remove('recording'); btn.innerHTML='<span class="rdot"></span> Ré-enregistrer';
+      setStatus('Terminé ! Écoute et télécharge ton enregistrement.'); activeRec=null;
+    };
+    activeRec.onerror=function(){ btn.classList.remove('recording'); btn.innerHTML='<span class="rdot"></span> Enregistrer'; setStatus('Erreur micro.'); stream.getTracks().forEach(function(t){ t.stop(); }); };
+    activeRec.start(100); btn.classList.add('recording'); btn.innerHTML='<span class="rdot"></span> Arrêter';
+    setStatus('Enregistrement en cours... Parle maintenant !');
+  }).catch(function(err){
+    var m='Micro inaccessible.';
+    if(err.name==='NotAllowedError') m='Permission refusée. Autorise le micro.';
+    else if(err.name==='NotFoundError') m='Aucun micro détecté.';
+    setStatus(m);
+  });
+}
+
+// ── HELPERS ─────────────────────────────────────────────
+function bindSpeak(parent){
+  parent.querySelectorAll('[data-speak]').forEach(function(b){
+    b.addEventListener('click',function(){ speak(b.dataset.speak,b.dataset.slow==='1'); });
+  });
+}
+function bindRec(parent){
+  parent.querySelectorAll('.btn-rec').forEach(function(b){
+    b.addEventListener('click',function(){ toggleRecord(b,b.dataset.pb); });
+  });
+}
+function makeRecZone(id){
+  return '<div class="rec-zone"><button class="btn-rec" data-pb="'+id+'"><span class="rdot"></span> Enregistrer</button>'
+       + '<div class="rec-status"></div><div class="audio-pb" id="'+id+'"><audio controls></audio></div></div>';
+}
+// Scores
+var hqOk=0,hqTot=0, jqOk=0,jqTot=0, mqOk=0,mqTot=0, sqOk=0,sqTot=0, dqOk=0,dqTot=0, gqOk=0,gqTot=0;
+function updBadge(id,ok,tot){ document.getElementById(id).textContent=ok+' / '+tot; }
+function updGQ(){
+  document.getElementById('gq-score').textContent=gqOk+' / '+gqTot;
+  var pct=gqTot>0?Math.round(gqOk/gqTot*100):0;
+  document.getElementById('gq-fill').style.width=pct+'%';
+}
+
+function buildMCQ(el, data, okRef, totRef, badgeId, globalScore){
+  var html='';
+  data.forEach(function(q,i){
+    var qid=(badgeId||'q')+'_'+i;
+    var optsH=q.opts.map(function(o,oi){
+      return '<button class="mcq-opt" data-qid="'+qid+'" data-idx="'+i+'" data-val="'+oi+'" data-bank="'+badgeId+'">'+o+'</button>';
+    }).join('');
+    html+='<div class="ex-card" id="'+qid+'">'
+        +'<h3>Question '+(i+1)+(q.tag?' <span>— '+q.tag+'</span>':'')+'</h3>'
+        +'<div class="mcq-q">'+q.q+'</div>'
+        +'<div class="mcq-opts">'+optsH+'</div>'
+        +'<div class="feedback" id="'+qid+'-fb"></div>'
+        +'</div>';
+  });
+  el.innerHTML=html;
+  el.querySelectorAll('.mcq-opt').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var qid=btn.dataset.qid, idx=parseInt(btn.dataset.idx), val=parseInt(btn.dataset.val);
+      var q=data[idx];
+      var card=document.getElementById(qid);
+      card.querySelectorAll('.mcq-opt').forEach(function(b){ b.disabled=true; });
+      var fb=document.getElementById(qid+'-fb');
+      if(globalScore){ gqTot++; } else { totRef[0]++; }
+      if(val===q.ans){
+        btn.classList.add('correct'); fb.className='feedback ok'; fb.textContent='✓ Bravo ! '+q.expl;
+        if(globalScore){ gqOk++; updGQ(); } else { okRef[0]++; updBadge(badgeId,okRef[0],totRef[0]); }
+      } else {
+        btn.classList.add('wrong');
+        card.querySelectorAll('.mcq-opt').forEach(function(b){ if(parseInt(b.dataset.val)===q.ans) b.classList.add('correct'); });
+        fb.className='feedback ko'; fb.textContent='✗ '+q.expl;
+        if(globalScore){ updGQ(); } else { updBadge(badgeId,okRef[0],totRef[0]); }
+      }
+      fb.style.display='block';
+      // Listen answer
+      if(q.model){
+        var lb=document.createElement('button'); lb.className='btn btn-blue listen-ans';
+        lb.style.marginTop='.4rem'; lb.innerHTML='&#9654; La bonne réponse';
+        lb.addEventListener('click',function(){
+          speakSequence([
+            {text:'La bonne réponse est :',rate:'ann',pause:300},
+            {text:q.opts[q.ans],rate:'slow',pause:700},
+            {text:'Maintenant la phrase complète :',rate:'ann',pause:300},
+            {text:q.model,rate:'normal',pause:0},
+          ]);
+        });
+        fb.after(lb);
+      }
+    });
+  });
+}
+
+// ── DATA ────────────────────────────────────────────────
+
+var clockData = [
+  {time:'8h00',   fr:'Il est huit heures.',                    pt:'São oito horas.'},
+  {time:'12h00',  fr:'Il est midi.',                           pt:'É meio-dia.'},
+  {time:'12h15',  fr:'Il est midi et quart.',                  pt:'É meio-dia e quinze.'},
+  {time:'14h30',  fr:'Il est quatorze heures trente.',         pt:'São quatorze horas e meia.'},
+  {time:'17h45',  fr:'Il est dix-huit heures moins le quart.', pt:'São dezessete e quarenta e cinco.'},
+  {time:'19h00',  fr:'Il est dix-neuf heures.',                pt:'São dezenove horas.'},
+  {time:'20h30',  fr:'Il est vingt heures et demie.',          pt:'São vinte horas e meia.'},
+  {time:'00h00',  fr:'Il est minuit.',                         pt:'É meia-noite.'},
+];
+
+var heuresList = [
+  {fr:'Il est sept heures du matin.',           pt:'São sete horas da manhã.'},
+  {fr:'Il est neuf heures et quart.',           pt:'São nove e quinze.'},
+  {fr:'Il est onze heures et demie.',           pt:'São onze e meia.'},
+  {fr:'Il est treize heures.',                  pt:'São treze horas.'},
+  {fr:'Il est quinze heures moins cinq.',       pt:'São quatorze horas e cinquenta e cinco.'},
+  {fr:'Il est dix-sept heures trente.',         pt:'São dezessete e trinta.'},
+  {fr:'Il est vingt-deux heures moins le quart.', pt:'São vinte e uma e quarenta e cinco.'},
+  {fr:'Quelle heure est-il, s\'il vous plaît ?', pt:'Que horas são, por favor?'},
+  {fr:'Il est presque midi.',                   pt:'É quase meio-dia.'},
+  {fr:'Le train part à quatorze heures quarante-sept.', pt:'O trem parte às 14h47.'},
+];
+
+var heureQuiz = [
+  {q:'15h30 — quelles formes sont correctes en français ?',
+   opts:['Il est quinze heures trente. (format 24h)','Il est trois heures et demie. (format 12h)','Ces deux formes sont correctes !','Il est trois heures trente.'],
+   ans:2, expl:'Les DEUX sont correctes ! Format 24h : "quinze heures trente". Format 12h courant : "trois heures et demie de l\'après-midi". En France le 24h est officiel (gares, médecin...).', model:'Il est quinze heures trente. Ou : il est trois heures et demie de l\'après-midi.'},
+  {q:'Quelle heure correspond à "Il est midi et quart" ?',
+   opts:['12h00','12h15','12h45','13h15'],
+   ans:1, expl:'"Et quart" = + 15 minutes. Midi + 15 min = 12h15.', model:'Il est midi et quart.'},
+  {q:'Comment dit-on 7h45 en français ?',
+   opts:['Il est sept heures quarante-cinq.','Il est huit heures moins cinq.','Il est huit heures moins le quart.','Il est sept heures et demie.'],
+   ans:2, expl:'7h45 = 8h - 15 min = "huit heures moins le quart". C\'est la forme la plus courante à l\'oral.', model:'Il est huit heures moins le quart.'},
+  {q:'Dans quel contexte utilise-t-on le format 24h en France ?',
+   opts:['Uniquement entre amis','Dans les gares, aéroports, hôpitaux, au travail','Seulement à la maison','Jamais, le 24h n\'existe pas en France'],
+   ans:1, expl:'Le format 24h est officiel en France : gares (SNCF), aéroports, hôpitaux, administrations, écoles.', model:'Le train part à dix-huit heures quinze.'},
+  {q:'Comment dit-on "São quase nove horas" en français ?',
+   opts:['Il est presque neuf heures.','Il est neuf heures bientôt.','Il est avant neuf heures.','Il est neuf heures environ.'],
+   ans:0, expl:'"Quase" = presque. On dit "il est presque neuf heures" — "bientôt" et "environ" ne s\'utilisent pas pour l\'heure.', model:'Il est presque neuf heures.'},
+];
+
+var joursData = [
+  {fr:'lundi',    pt:'segunda-feira', say:'lundi', ex:'Je travaille le lundi.', color:var_blue()},
+  {fr:'mardi',    pt:'terça-feira',   say:'mardi', ex:'Mardi j\'ai cours de français.', color:var_blue()},
+  {fr:'mercredi', pt:'quarta-feira',  say:'mercredi', ex:'Mercredi l\'après-midi, pas d\'école !', color:var_green()},
+  {fr:'jeudi',    pt:'quinta-feira',  say:'jeudi', ex:'On se voit jeudi ?', color:var_blue()},
+  {fr:'vendredi', pt:'sexta-feira',   say:'vendredi', ex:'Vendredi soir on sort !', color:var_orange()},
+  {fr:'samedi',   pt:'sábado',        say:'samedi', ex:'Samedi matin au marché.', color:var_purple()},
+  {fr:'dimanche', pt:'domingo',       say:'dimanche', ex:'Dimanche tout est fermé en France.', color:var_red()},
+];
+function var_blue(){ return 'var(--blue)'; }
+function var_green(){ return 'var(--green)'; }
+function var_orange(){ return 'var(--orange)'; }
+function var_purple(){ return 'var(--purple)'; }
+function var_red(){ return 'var(--red)'; }
+
+var joursExprData = [
+  {fr:'aujourd\'hui',   pt:'hoje',              ex:'Aujourd\'hui c\'est mercredi.'},
+  {fr:'demain',         pt:'amanhã',            ex:'Demain c\'est jeudi.'},
+  {fr:'hier',           pt:'ontem',             ex:'Hier c\'était mardi.'},
+  {fr:'après-demain',   pt:'depois de amanhã',  ex:'Après-demain c\'est vendredi.'},
+  {fr:'la semaine prochaine', pt:'semana que vem', ex:'La semaine prochaine je pars en vacances.'},
+  {fr:'le week-end',    pt:'o fim de semana',   ex:'Le week-end je me repose.'},
+  {fr:'en semaine',     pt:'durante a semana',  ex:'En semaine je travaille.'},
+  {fr:'tous les lundis',pt:'todas as segundas', ex:'Je vais à la gym tous les lundis.'},
+];
+
+var joursQuiz = [
+  {q:'Quel jour vient après le mercredi ?',
+   opts:['Mardi','Jeudi','Vendredi','Lundi'],
+   ans:1, expl:'L\'ordre : lundi - mardi - mercredi - <b>jeudi</b> - vendredi...', model:'Après le mercredi vient le jeudi.'},
+  {q:'Quelle est la différence entre "Je travaille lundi" et "Je travaille le lundi" ?',
+   opts:['Aucune différence.','Le premier = ce lundi. Le deuxième = tous les lundis.','Le premier = tous les lundis. Le deuxième = ce lundi.','L\'un est formel, l\'autre informel.'],
+   ans:1, expl:'"Je travaille lundi" = prochain lundi uniquement. "Je travaille le lundi" = chaque semaine.', model:'Je travaille tous les lundis.'},
+  {q:'Comment dit-on "depois de amanhã" en français ?',
+   opts:['avant-hier','la semaine prochaine','après-demain','demain soir'],
+   ans:2, expl:'"Depois de amanhã" = après-demain.', model:'Après-demain c\'est vendredi.'},
+  {q:'En France, par quel jour commence la semaine dans un agenda ?',
+   opts:['Dimanche','Samedi','Vendredi','Lundi'],
+   ans:3, expl:'En France les agendas commencent toujours le lundi, pas le dimanche comme au Brésil !', model:'La semaine commence le lundi.'},
+  {q:'Comment dit-on "ontem" en français ?',
+   opts:['aujourd\'hui','demain','hier','avant-hier'],
+   ans:2, expl:'"Ontem" = hier.', model:'Hier c\'était lundi.'},
+];
+
+var moisData = [
+  {fr:'janvier',   pt:'janeiro',   num:'01', fete:'Jour de l\'An'},
+  {fr:'février',   pt:'fevereiro', num:'02', fete:'Saint-Valentin (14/02)'},
+  {fr:'mars',      pt:'março',     num:'03', fete:'Début printemps'},
+  {fr:'avril',     pt:'abril',     num:'04', fete:'Poisson d\'avril !'},
+  {fr:'mai',       pt:'maio',      num:'05', fete:'Fête du Travail'},
+  {fr:'juin',      pt:'junho',     num:'06', fete:'Fête de la Musique'},
+  {fr:'juillet',   pt:'julho',     num:'07', fete:'14 Juillet !'},
+  {fr:'août',      pt:'agosto',    num:'08', fete:'Grandes vacances'},
+  {fr:'septembre', pt:'setembro',  num:'09', fete:'Rentrée scolaire'},
+  {fr:'octobre',   pt:'outubro',   num:'10', fete:'Halloween (31/10)'},
+  {fr:'novembre',  pt:'novembre',  num:'11', fete:'Toussaint (1/11)'},
+  {fr:'décembre',  pt:'dezembro',  num:'12', fete:'Noël (25/12)'},
+];
+
+var moisList = [
+  {fr:'En janvier il fait très froid à Paris.',         pt:'Em janeiro faz muito frio em Paris.'},
+  {fr:'En juillet c\'est la fête nationale française.', pt:'Em julho é o feriado nacional francês.'},
+  {fr:'En août beaucoup de Français partent en vacances.', pt:'Em agosto muitos franceses vão de férias.'},
+  {fr:'En septembre c\'est la rentrée des classes.',    pt:'Em setembro começa o ano letivo.'},
+  {fr:'Mon anniversaire, c\'est en décembre.',          pt:'Meu aniversário é em dezembro.'},
+  {fr:'Au mois de mars, c\'est le début du printemps.', pt:'No mês de março começa a primavera.'},
+  {fr:'En France, les vacances de Noël sont en décembre.', pt:'Na França, as férias de Natal são em dezembro.'},
+];
+
+var moisQuiz = [
+  {q:'Comment dit-on "agosto" en français ?',
+   opts:['avril','juin','août','octobre'],
+   ans:2, expl:'"Agosto" = août (avec un accent : août).', model:'En août il fait très chaud en France.'},
+  {q:'Quelle préposition utilise-t-on devant les mois ?',
+   opts:['au','à','en','dans'],
+   ans:2, expl:'On dit "en + mois" : en janvier, en mars, en août.', model:'Je pars en vacances en juillet.'},
+  {q:'Quel mois est la rentrée scolaire en France ?',
+   opts:['août','juillet','octobre','septembre'],
+   ans:3, expl:'La rentrée en France c\'est en septembre, début du mois.', model:'La rentrée, c\'est en septembre.'},
+  {q:'Comment s\'écrit le nom des mois en français ?',
+   opts:['Avec une majuscule : Janvier','En minuscule : janvier','Tout en majuscules : JANVIER','Ça dépend de la phrase'],
+   ans:1, expl:'Les mois s\'écrivent toujours en minuscule en français : janvier, mars, décembre...', model:'Mon anniversaire c\'est en mars.'},
+  {q:'Quelle est la fête du 14 juillet en France ?',
+   opts:['Noël','La Toussaint','La fête du Travail','La fête Nationale — prise de la Bastille'],
+   ans:3, expl:'Le 14 juillet 1789, c\'est la prise de la Bastille. Feux d\'artifice, défilé militaire !', model:'Le quatorze juillet, c\'est la fête nationale.'},
+];
+
+var saisonsData = [
+  {cls:'printemps', name:'Le printemps', months:'mars — mai',    prep:'au printemps',
+   phrase:'Au printemps il fait doux et les fleurs s\'ouvrent.',  pt:'Na primavera'},
+  {cls:'ete',       name:'L\'été',       months:'juin — août',   prep:'en été',
+   phrase:'En été il fait très chaud et on va à la plage.',       pt:'No verão'},
+  {cls:'automne',   name:'L\'automne',   months:'sept — nov',    prep:'en automne',
+   phrase:'En automne les feuilles tombent et il pleut souvent.', pt:'No outono'},
+  {cls:'hiver',     name:'L\'hiver',     months:'déc — févr',    prep:'en hiver',
+   phrase:'En hiver il fait froid et parfois il neige à Paris.',  pt:'No inverno'},
+];
+
+var meteoList = [
+  {fr:'Il fait beau aujourd\'hui !',    pt:'Está bom tempo hoje!'},
+  {fr:'Il fait mauvais, il pleut.',     pt:'Está mau tempo, está chovendo.'},
+  {fr:'Il fait très froid ce matin.',   pt:'Está muito frio esta manhã.'},
+  {fr:'Il fait chaud, c\'est l\'été !', pt:'Está quente, é verão!'},
+  {fr:'Il y a du soleil.',              pt:'Tem sol.'},
+  {fr:'Il y a du vent et des nuages.',  pt:'Tem vento e nuvens.'},
+  {fr:'Il neige à Paris !',             pt:'Está nevando em Paris!'},
+  {fr:'C\'est nuageux mais pas froid.', pt:'Está nublado mas não está frio.'},
+];
+
+var saisonsQuiz = [
+  {q:'Quelle préposition utilise-t-on avec "printemps" ?',
+   opts:['en printemps','au printemps','dans le printemps','le printemps'],
+   ans:1, expl:'"Au printemps" — c\'est l\'exception ! Pour les trois autres saisons on dit "en".', model:'Au printemps il fait doux.'},
+  {q:'Quand les Français ont-ils leurs grandes vacances ?',
+   opts:['En hiver (décembre)','Au printemps (mars-avril)','En été (juillet-août)','En automne (octobre)'],
+   ans:2, expl:'Les grandes vacances scolaires en France sont en juillet et août.', model:'En été les Français partent en vacances.'},
+  {q:'Quelle saison correspond à "no inverno" ?',
+   opts:['L\'été','Le printemps','L\'automne','L\'hiver'],
+   ans:3, expl:'"No inverno" = en hiver. L\'hiver en France est de décembre à février.', model:'En hiver il fait froid à Paris.'},
+  {q:'Quand les feuilles tombent-elles des arbres en France ?',
+   opts:['Au printemps','En été','En automne','En hiver'],
+   ans:2, expl:'Les feuilles tombent en automne (septembre-novembre).', model:'En automne les feuilles tombent.'},
+  {q:'Comment dit-on "Está chovendo" en français ?',
+   opts:['Il neige.','Il fait froid.','Il y a du soleil.','Il pleut.'],
+   ans:3, expl:'"Está chovendo" = il pleut.', model:'Il pleut dehors, prends ton parapluie !'},
+];
+
+var datesList = [
+  {fr:'Aujourd\'hui c\'est le lundi 14 juillet 2025.',   pt:'Hoje é segunda-feira, 14 de julho de 2025.'},
+  {fr:'Mon anniversaire, c\'est le 3 mai.',              pt:'Meu aniversário é dia 3 de maio.'},
+  {fr:'Je suis né le 12 août 1998.',                     pt:'Nasci no dia 12 de agosto de 1998.'},
+  {fr:'Le rendez-vous est le mardi 18 mars à 14h30.',    pt:'A consulta é terça-feira, 18 de março às 14h30.'},
+  {fr:'La fête nationale, c\'est le 14 juillet.',        pt:'O feriado nacional é 14 de julho.'},
+  {fr:'Noël, c\'est le 25 décembre.',                    pt:'Natal é no dia 25 de dezembro.'},
+  {fr:'Le premier janvier, c\'est le Jour de l\'An.',    pt:'O primeiro de janeiro é Ano Novo.'},
+];
+
+var datesQuiz = [
+  {q:'Comment dit-on le 1er du mois en français ?',
+   opts:['le un janvier','le premier janvier','le une janvier','le premier de janvier'],
+   ans:1, expl:'On dit "le premier" — jamais "le un". C\'est une exception importante !', model:'Nous sommes le premier mars.'},
+  {q:'Mettez dans le bon ordre : juillet / le / 14 / 2024',
+   opts:['14 juillet le 2024','le juillet 14 2024','le 14 juillet 2024','juillet le 14 2024'],
+   ans:2, expl:'Structure : Le + chiffre + mois + année = le 14 juillet 2024.', model:'Le quatorze juillet deux mille vingt-quatre.'},
+  {q:'Comment dit-on l\'année 2024 en français ?',
+   opts:['vingt vingt-quatre','deux mille vingt-quatre','deux cent vingt-quatre','vingt-quatre cent'],
+   ans:1, expl:'En français on dit toujours le nombre complet : deux mille vingt-quatre.', model:'Nous sommes en deux mille vingt-cinq.'},
+  {q:'Comment demande-t-on la date en français ?',
+   opts:['Quel est le jour ?','C\'est quoi la date ?','Quelle est la date aujourd\'hui ?','Quand est aujourd\'hui ?'],
+   ans:2, expl:'"Quelle est la date aujourd\'hui ?" est la formule correcte et courante.', model:'Quelle est la date aujourd\'hui ? C\'est le cinq mars.'},
+  {q:'Comment dit-on "Quando é seu aniversário ?" en français ?',
+   opts:['Quand est ton anniversaire ?','C\'est quand ton anniversaire ?','Quel est ton anniversaire ?','Tu as quand anniversaire ?'],
+   ans:1, expl:'"C\'est quand ton anniversaire ?" est la formule la plus naturelle et courante.', model:'C\'est quand ton anniversaire ? Mon anniversaire c\'est le quinze juin.'},
+];
+
+var generalQuiz = [
+  {q:'13h15 — quelle(s) forme(s) sont correctes ?',
+   opts:['Il est treize heures quinze. (24h)','Il est une heure et quart. (12h)','Ces deux formes sont correctes !','Il est une heure quinze.'],
+   ans:2, expl:'Les DEUX sont correctes ! Format 24h : "treize heures quinze". Format 12h : "une heure et quart de l\'après-midi". En France les deux s\'utilisent selon le contexte.', model:'Il est treize heures quinze. Ou : il est une heure et quart de l\'après-midi.',tag:'Heures'},
+  {q:'Quel jour vient avant le vendredi ?',
+   opts:['Mercredi','Samedi','Jeudi','Lundi'],
+   ans:2, expl:'L\'ordre : ... mercredi - jeudi - vendredi ...', model:'Jeudi vient avant vendredi.',tag:'Jours'},
+  {q:'En quelle saison est le mois de novembre en France ?',
+   opts:['Au printemps','En été','En automne','En hiver'],
+   ans:2, expl:'Novembre = automne (septembre, octobre, novembre).', model:'En novembre, c\'est l\'automne.',tag:'Saisons'},
+  {q:'Comment dit-on "Hoje é segunda-feira, 5 de junho" ?',
+   opts:['Aujourd\'hui c\'est lundi, le cinq juin.','Aujourd\'hui c\'est mardi, le cinq juin.','Hier c\'était lundi, le cinq juin.','Aujourd\'hui c\'est lundi, le juin cinq.'],
+   ans:0, expl:'"Segunda-feira" = lundi. Structure : Aujourd\'hui c\'est lundi, le 5 juin.', model:'Aujourd\'hui c\'est lundi, le cinq juin.',tag:'Dates'},
+  {q:'Quelle est la météo typique en hiver à Paris ?',
+   opts:['Il fait très chaud.','Il fait froid, il peut neiger.','Il fait doux.','Il fait 30 degrés.'],
+   ans:1, expl:'Paris en hiver (déc-févr) : 2 à 5°C, parfois de la neige.', model:'En hiver à Paris il fait froid et il neige parfois.',tag:'Saisons'},
+  {q:'Comment dit-on "en fevereiro" en français ?',
+   opts:['en janvier','en fevrier','en février','en fébrier'],
+   ans:2, expl:'"Fevereiro" = février (avec un accent sur le é).', model:'En février c\'est la Saint-Valentin.',tag:'Mois'},
+  {q:'Quelle est la bonne structure pour une date ?',
+   opts:['2024 juillet 14 le','le 14 juillet 2024','14 le juillet 2024','juillet le 2024 14'],
+   ans:1, expl:'Structure : Le + chiffre + mois + année.', model:'Nous sommes le quatorze juillet deux mille vingt-quatre.',tag:'Dates'},
+  {q:'Que dit-on pour "Está nevando" en français ?',
+   opts:['Il fait froid.','Il pleut.','Il neige.','Il fait mauvais.'],
+   ans:2, expl:'"Está nevando" = il neige.', model:'Il neige à Paris ce soir !',tag:'Météo'},
+];
+
+var oralData = [
+  {prompt:'Dites quelle heure il est maintenant (en format 12h et en format 24h).',
+   model:'Il est quatorze heures trente. Ou : il est deux heures et demie de l\'après-midi.',
+   hint:'Il est + heure(s) + minutes.'},
+  {prompt:'Donnez la date d\'aujourd\'hui complète en français.',
+   model:'Aujourd\'hui c\'est lundi, le dix mars deux mille vingt-cinq.',
+   hint:'Aujourd\'hui c\'est + jour + le + chiffre + mois + année.'},
+  {prompt:'Décrivez votre saison préférée : pourquoi vous l\'aimez, la météo, ce que vous faites.',
+   model:'Ma saison préférée c\'est l\'été. En été il fait chaud et je vais à la plage. J\'adore le soleil !',
+   hint:'Ma saison préférée c\'est... En + saison + il fait... Je...'},
+  {prompt:'Dites quand est votre anniversaire et quel âge vous aurez.',
+   model:'Mon anniversaire c\'est le quinze août. J\'aurai vingt-cinq ans.',
+   hint:'Mon anniversaire c\'est le + chiffre + mois. J\'aurai + âge + ans.'},
+  {prompt:'Parlez de votre semaine typique : quels jours vous travaillez / étudiez / êtes libre.',
+   model:'Je travaille le lundi, le mardi et le jeudi. Le mercredi je suis libre. Le week-end je me repose.',
+   hint:'Je travaille le + jour. Je suis libre le + jour.'},
+  {prompt:'Imaginez un rendez-vous médical : donnez le jour, la date et l\'heure.',
+   model:'Mon rendez-vous est le mardi dix-huit mars à quatorze heures trente.',
+   hint:'Mon rendez-vous est le + jour + chiffre + mois + à + heure.'},
+  {prompt:'Décrivez la météo typique en France pendant les quatre saisons.',
+   model:'Au printemps il fait doux. En été il fait chaud. En automne il pleut. En hiver il fait froid.',
+   hint:'Au printemps / en été / en automne / en hiver + il fait + adjectif.'},
+];
+
+// ── BUILD FUNCTIONS ──────────────────────────────────────
+
+function buildClockGrid(){
+  var el=document.getElementById('clock-grid'); var html='';
+  clockData.forEach(function(c){
+    html+='<div class="clock-card" data-speak="'+c.fr+'">'
+        +'<span class="time">'+c.time+'</span>'
+        +'<div class="text">'+c.fr+'</div>'
+        +'<div class="pt">'+c.pt+'</div>'
+        +'<div class="pico">▶</div></div>';
+  });
+  el.innerHTML=html;
+  el.querySelectorAll('.clock-card').forEach(function(c){ c.addEventListener('click',function(){ speak(c.dataset.speak,false); }); });
+}
+
+function buildHeuresList(){
+  var el=document.getElementById('heures-list'); var html='';
+  heuresList.forEach(function(h,i){
+    var id='hrec'+i;
+    html+='<div style="margin-bottom:.5rem">'
+        +'<div class="listen-item">'
+        +'<div class="lw" style="font-size:.92rem">'+h.fr+'<br><em>'+h.pt+'</em></div>'
+        +'<button class="btn btn-blue" data-speak="'+h.fr+'" data-slow="0">▶ Normal</button>'
+        +'<button class="btn btn-slow" data-speak="'+h.fr+'" data-slow="1">Lent</button>'
+        +'<button class="btn-rec" data-pb="'+id+'"><span class="rdot"></span> Rec</button>'
+        +'</div>'
+        +'<div class="audio-pb" id="'+id+'" style="margin:.2rem 0 0 .5rem"><audio controls></audio></div>'
+        +'<div class="rec-status" style="margin:.1rem 0 0 .5rem"></div>'
+        +'</div>';
+  });
+  el.innerHTML=html; bindSpeak(el); bindRec(el);
+}
+
+function buildJoursGrid(){
+  var el=document.getElementById('jours-grid');
+  var html='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.55rem;margin-bottom:1rem">';
+  joursData.forEach(function(j){
+    html+='<div class="cal-card" data-speak="'+j.say+'">'
+        +'<div class="fr">'+j.fr+'</div>'
+        +'<div class="pt">'+j.pt+'</div>'
+        +'</div>';
+  });
+  html+='</div>';
+  // Phrases
+  html+='<div class="sec-title" style="font-size:.9rem;margin-bottom:.5rem">Phrases avec les jours</div>';
+  joursData.forEach(function(j,i){
+    var id='jrec'+i;
+    html+='<div style="margin-bottom:.4rem">'
+        +'<div class="listen-item">'
+        +'<div class="lw" style="font-size:.9rem">'+j.ex+'</div>'
+        +'<button class="btn btn-blue" data-speak="'+j.ex+'" data-slow="0">▶</button>'
+        +'<button class="btn btn-slow" data-speak="'+j.ex+'" data-slow="1">Lent</button>'
+        +'<button class="btn-rec" data-pb="'+id+'"><span class="rdot"></span> Rec</button>'
+        +'</div>'
+        +'<div class="audio-pb" id="'+id+'" style="margin:.2rem 0 0 .5rem"><audio controls></audio></div>'
+        +'<div class="rec-status" style="margin:.1rem 0 0 .5rem"></div>'
+        +'</div>';
+  });
+  el.innerHTML=html;
+  el.querySelectorAll('.cal-card').forEach(function(c){ c.addEventListener('click',function(){ speak(c.dataset.speak,false); }); });
+  bindSpeak(el); bindRec(el);
+}
+
+function buildJoursExpr(){
+  var el=document.getElementById('jours-expr'); var html='';
+  joursExprData.forEach(function(e,i){
+    var id='jerec'+i;
+    html+='<div style="margin-bottom:.4rem">'
+        +'<div class="listen-item">'
+        +'<div class="lw"><b style="color:var(--green-lt)">'+e.fr+'</b> <em>— '+e.pt+'</em></div>'
+        +'<div style="flex:2;font-size:.85rem;color:var(--muted)">'+e.ex+'</div>'
+        +'<button class="btn btn-blue" data-speak="'+e.ex+'" data-slow="0">▶</button>'
+        +'<button class="btn btn-slow" data-speak="'+e.ex+'" data-slow="1">Lent</button>'
+        +'<button class="btn-rec" data-pb="'+id+'"><span class="rdot"></span> Rec</button>'
+        +'</div>'
+        +'<div class="audio-pb" id="'+id+'" style="margin:.2rem 0 0 .5rem"><audio controls></audio></div>'
+        +'<div class="rec-status" style="margin:.1rem 0 0 .5rem"></div>'
+        +'</div>';
+  });
+  el.innerHTML=html; bindSpeak(el); bindRec(el);
+}
+
+function buildMoisGrid(){
+  var el=document.getElementById('mois-grid'); var html='';
+  moisData.forEach(function(m){
+    html+='<div class="cal-card" data-speak="'+m.fr+'" title="'+m.fete+'">'
+        +'<div class="fr">'+m.fr+'</div>'
+        +'<div class="pt">'+m.pt+'</div>'
+        +'<div style="font-size:.68rem;color:var(--orange-lt);margin-top:.15rem">'+m.fete+'</div>'
+        +'</div>';
+  });
+  el.innerHTML=html;
+  el.querySelectorAll('.cal-card').forEach(function(c){ c.addEventListener('click',function(){ speak(c.dataset.speak,false); }); });
+}
+
+function buildMoisList(){
+  var el=document.getElementById('mois-list'); var html='';
+  moisList.forEach(function(m,i){
+    var id='mrec'+i;
+    html+='<div style="margin-bottom:.4rem">'
+        +'<div class="listen-item" style="flex-wrap:wrap">'
+        +'<div class="lw" style="font-size:.9rem;flex:2">'+m.fr+'<br><em>'+m.pt+'</em></div>'
+        +'<button class="btn btn-blue" data-speak="'+m.fr+'" data-slow="0">▶ Normal</button>'
+        +'<button class="btn btn-slow" data-speak="'+m.fr+'" data-slow="1">Lent</button>'
+        +'<button class="btn-rec" data-pb="'+id+'"><span class="rdot"></span> Rec</button>'
+        +'</div>'
+        +'<div class="audio-pb" id="'+id+'" style="width:100%"><audio controls></audio></div>'
+        +'<div class="rec-status" style="margin:.1rem 0 0 .5rem"></div>'
+        +'</div>';
+  });
+  el.innerHTML=html; bindSpeak(el); bindRec(el);
+}
+
+function buildSaisonsGrid(){
+  var el=document.getElementById('saisons-grid'); var html='';
+  saisonsData.forEach(function(s){
+    html+='<div class="season-card '+s.cls+'" data-speak="'+s.phrase+'">'
+        +'<div class="name">'+s.name+'</div>'
+        +'<div class="months">'+s.months+'</div>'
+        +'<div style="font-size:.78rem;color:var(--muted);margin-bottom:.3rem">'+s.pt+'</div>'
+        +'<div class="phrase">'+s.phrase+'</div>'
+        +'<div style="margin-top:.5rem;font-size:.7rem;color:var(--muted)">Cliquer pour écouter</div>'
+        +'</div>';
+  });
+  el.innerHTML=html;
+  el.querySelectorAll('.season-card').forEach(function(c){ c.addEventListener('click',function(){ speak(c.dataset.speak,false); }); });
+}
+
+function buildMeteoList(){
+  var el=document.getElementById('meteo-list'); var html='';
+  meteoList.forEach(function(m,i){
+    var id='metrec'+i;
+    html+='<div style="margin-bottom:.4rem">'
+        +'<div class="listen-item">'
+        +'<div class="lw" style="font-size:.92rem">'+m.fr+'<br><em>'+m.pt+'</em></div>'
+        +'<button class="btn btn-blue" data-speak="'+m.fr+'" data-slow="0">▶</button>'
+        +'<button class="btn btn-slow" data-speak="'+m.fr+'" data-slow="1">Lent</button>'
+        +'<button class="btn-rec" data-pb="'+id+'"><span class="rdot"></span> Rec</button>'
+        +'</div>'
+        +'<div class="audio-pb" id="'+id+'" style="margin:.2rem 0 0 .5rem"><audio controls></audio></div>'
+        +'<div class="rec-status" style="margin:.1rem 0 0 .5rem"></div>'
+        +'</div>';
+  });
+  el.innerHTML=html; bindSpeak(el); bindRec(el);
+}
+
+function buildDatesList(){
+  var el=document.getElementById('dates-list'); var html='';
+  datesList.forEach(function(d,i){
+    var id='drec'+i;
+    html+='<div style="margin-bottom:.4rem">'
+        +'<div class="listen-item" style="flex-wrap:wrap">'
+        +'<div class="lw" style="font-size:.92rem;flex:2">'+d.fr+'<br><em>'+d.pt+'</em></div>'
+        +'<button class="btn btn-blue" data-speak="'+d.fr+'" data-slow="0">▶ Normal</button>'
+        +'<button class="btn btn-slow" data-speak="'+d.fr+'" data-slow="1">Lent</button>'
+        +'<button class="btn-rec" data-pb="'+id+'"><span class="rdot"></span> Rec</button>'
+        +'</div>'
+        +'<div class="audio-pb" id="'+id+'" style="width:100%"><audio controls></audio></div>'
+        +'<div class="rec-status" style="margin:.1rem 0 0 .5rem"></div>'
+        +'</div>';
+  });
+  el.innerHTML=html; bindSpeak(el); bindRec(el);
+}
+
+function buildOralList(){
+  var el=document.getElementById('oral-list'); var html='';
+  oralData.forEach(function(o,i){
+    var id='orec'+i;
+    var modelClean=o.model.replace(/'/g,' ');
+    html+='<div class="ex-card">'
+        +'<h3>Exercice '+(i+1)+'</h3>'
+        +'<div class="mcq-q">'+o.prompt+'</div>'
+        +'<div style="font-size:.8rem;color:var(--muted);font-style:italic;margin-bottom:.7rem">Aide : '+o.hint+'</div>'
+        +'<div style="display:flex;gap:.4rem;flex-wrap:wrap;align-items:center">'
+        +'<button class="btn btn-blue" data-speak="'+modelClean+'" data-slow="0">▶ Modèle</button>'
+        +'<button class="btn btn-slow" data-speak="'+modelClean+'" data-slow="1">Modèle lent</button>'
+        +'<button class="btn-rec" data-pb="'+id+'"><span class="rdot"></span> Enregistrer</button>'
+        +'</div>'
+        +'<div class="rec-status" style="margin-top:.3rem"></div>'
+        +'<div class="audio-pb" id="'+id+'"><audio controls></audio></div>'
+        +'</div>';
+  });
+  el.innerHTML=html; bindSpeak(el); bindRec(el);
+}
+
+// ── TABS ────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ── INIT ────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',function(){
+  window.speechSynthesis.getVoices();
+  buildClockGrid();
+  buildHeuresList();
+  buildJoursGrid();
+  buildJoursExpr();
+  buildMoisGrid();
+  buildMoisList();
+  buildSaisonsGrid();
+  buildMeteoList();
+  buildDatesList();
+  buildOralList();
+
+  var hqOkRef=[0],hqTotRef=[0];
+  buildMCQ(document.getElementById('heure-quiz'), heureQuiz, hqOkRef, hqTotRef, 'hq-badge', false);
+  var jqOkRef=[0],jqTotRef=[0];
+  buildMCQ(document.getElementById('jours-quiz'), joursQuiz, jqOkRef, jqTotRef, 'jq-badge', false);
+  var mqOkRef=[0],mqTotRef=[0];
+  buildMCQ(document.getElementById('mois-quiz'),  moisQuiz,  mqOkRef, mqTotRef, 'mq-badge', false);
+  var sqOkRef=[0],sqTotRef=[0];
+  buildMCQ(document.getElementById('saisons-quiz'),saisonsQuiz,sqOkRef,sqTotRef,'sq-badge', false);
+  var dqOkRef=[0],dqTotRef=[0];
+  buildMCQ(document.getElementById('dates-quiz'), datesQuiz, dqOkRef, dqTotRef, 'dq-badge', false);
+  buildMCQ(document.getElementById('general-quiz'),generalQuiz,null,null,'gq-score',true);
+});
+
+})();
+</script>
+</body>
+</html>
